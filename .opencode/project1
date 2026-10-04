@@ -1,0 +1,41 @@
+> ⚠️⚠️⚠️ OBSERVAÇÃO IMPORTANTE ⚠️⚠️⚠️
+> NÃO TESTE NEM USE O OPENCODE PARA ESSA TAREFA (mas rode ele normalmente em background),
+> pois ela exige o máximo potencial agêntico — apenas deixe-o rodar em background
+> para edições futuras após a conclusão completa da tarefa.
+> ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+# Plano elaborado de melhorias (foco: utilidade + UX/UI; sem auth/segurança/multiusuário)
+
+## Trilha A — Motor de correção (maior alavanca de utilidade) — P0
+- Scoring com ordem (alinhamento por sequência): trocar bag-of-words por alinhamento tipo LCS/Needleman-Wunsch sobre palavras normalizadas. Mantém hit/missed/substituted, mas adiciona status moved (palavra certa fora de ordem) e penalidade parcial. Mostra transcrição dita ao lado do mapa.
+- Proxies de fluência reais: contar pausas/repetições via timestamps dos resultados interim, curva de WPM, taxa de extras; exibir "pausas longas: N · repetições: N" no ScorePanel.
+- Guarda contra 0% injusto: transcrição vazia/curta demais → estado "não avaliável, tente de novo" em vez de 0%.
+- Opção en-AU: seletor de sotaque do reconhecimento (en-US/en-AU/en-GB), padrão en-AU por fidelidade ao PTE.
+- Modo manual útil: ao invés de "sem score", permitir tocar nas palavras que errou para gerar score manual.
+
+## Trilha B — Sessão de treino (o loop diário) — P0
+- Modo Sessão: "Treinar N questões" (5/10/15) com fila, shuffle inteligente (fracas primeiro + menos recentes + intercalação), barra "3/10", sem voltar à home entre questões.
+- Continuar inteligente: alternar entre fraca, revisão espaçada e nova — nunca repetir a mesma questão em loop.
+- Prática com olhos abertos: transcrição interim ao vivo, medidor de nível do mic, teste de mic nos Ajustes, confirmação antes do auto-stop por silêncio.
+- Replay da própria voz: gravar áudio com MediaRecorder em paralelo ao reconhecimento; botão "ouvir minha leitura" no resultado.
+- Shadowing: modelo lido frase a frase com destaque sincronizado (exige fatiar o TTS em chunks — resolve também o corte do Chrome).
+- Teclado: Espaço inicia/para, setas navegam, R repete — com foco gerenciado após navegação.
+
+## Trilha C — Leitura do passage — P1
+- Controle de tamanho da fonte, modo foco (escurece resto / karaokê durante o modelo), destaque prévio de palavras longas/pouco frequentes, impressão/export do passage.
+
+## Trilha D — Home/lista — P1
+- Resolver os tópicos: re-etiquetar as 140 questões (auto-tag por palavras-chave + revisão manual) ou substituir chips por filtros úteis (tamanho, score, tentativas).
+- Paginação/"mostrar mais" (148 linhas de uma vez pesa no mobile), construtor de sessão a partir do filtro atual, sparkline por questão, onboarding de 3 passos no primeiro acesso.
+
+## Trilha E — Progresso que ensina — P1
+- Usar o recharts já instalado: linha de score + linha de WPM + volume de tentativas; heatmap de dias (streak de verdade); página/drawer por questão com histórico; lista "precisam de treino" separando nunca-tentadas de fracas; export/import JSON de backup (P0 dentro da trilha — protege o usuário único); zerar preserva ajustes.
+
+## Trilha F — Polish técnico e acessibilidade — P2
+- Montar <Toaster /> no __root.tsx; aria-live na contagem; corrigir wrap-around da navegação; corrigir activeProps do TopNav; barra inferior sem overflow a 390 px; seletor de voz + 3 velocidades; toggle de reduzir movimento; manifesto PWA mínimo (o PRD promete offline-first); guarda de hidratação do localStorage.
+
+## Ordem de execução sugerida
+- Fase 1 (utilidade): A (scoring com ordem + guarda 0%) + E-backup + B-sessão mínima.
+- Fase 2 (prática): B completo (mic meter, replay, shadowing, teclado).
+- Fase 3 (inteligência): D + E (tópicos, charts, detalhe por questão).
+- Fase 4 (polish): C + F.

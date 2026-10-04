@@ -1,0 +1,17 @@
+{
+  "name": "ReadAloud Trainer",
+  "short_name": "ReadAloud",
+  "description": "Treine Read Aloud do PTE com feedback palavra por palavra.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#131720",
+  "theme_color": "#131720",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

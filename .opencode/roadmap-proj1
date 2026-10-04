@@ -1,0 +1,36 @@
+# Roadmap — projeto 1 (ReadAloud Trainer v2)
+
+Guia de produção/verificação. Fonte do escopo: `.opencode/prd-project1.md` (← `.opencode/project1`).
+
+- [x] Fase 1 — utilidade (A + E-backup + B-sessão mínima)
+  - [x] `src/lib/scoring.ts`: alinhamento por sequência (moved + penalidade parcial + guarda `gradable` + repetições)
+  - [x] `src/lib/useSpeechRecognition.ts`: sotaque configurável + contagem de pausas longas
+  - [x] `src/lib/storage.ts`: settings.accent (padrão en-AU), export/import JSON, reset preserva ajustes
+  - [x] `src/lib/session.ts` + rota `/session`: fila inteligente 5/10/15, barra "3/10", resumo final
+  - [x] `src/routes/practice.tsx`: guarda não-avaliável, modo manual, progresso da sessão
+  - [x] `src/routes/settings.tsx`: seletor de sotaque + backup; TopNav/Home com atalho de Sessão
+  - [x] Verificação: vitest 21/21 + tsc --noEmit limpo + build OK + preview (home, /session, /practice com barra de sessão, /settings)
+- [x] Fase 2 — prática completa (medidor de mic, replay da voz, shadowing, atalhos de teclado)
+  - [x] `src/lib/useMicCapture.ts`: nível do mic (AnalyserNode) + MediaRecorder para replay
+  - [x] `src/components/MicMeter.tsx`: medidor em barras durante a gravação + teste de mic em `/settings`
+  - [x] `src/lib/useSpeechRecognition.ts`: opção `resume` (retomada após pausa confirmada)
+  - [x] `src/routes/practice.tsx`: confirmação antes do auto-stop por silêncio, replay "Ouvir minha leitura"
+  - [x] `src/lib/shadow.ts` + destaque sincronizado no `PassageText`: modelo lido frase a frase (shadowing)
+  - [x] Atalhos: Espaço inicia/para, setas navegam, R repete; foco gerenciado após navegação
+  - [x] Verificação: vitest 25/25 + tsc --noEmit limpo + build OK + preview
+- [x] Fase 3 — inteligência: re-etiquetar tópicos/filtros úteis, charts recharts (score+WPM+volume), detalhe por questão, paginação
+  - [x] `src/routes/progress.tsx`: gráficos recharts (score + WPM + volume, 14 dias) + heatmap de dias treinados
+  - [x] `src/routes/question.$id.tsx`: detalhe por questão com histórico de tentativas + sparkline; link via QuestionRow
+  - [x] `src/routes/index.tsx` + `FilterBar`: "mostrar mais" em lotes de 25 + filtros por tamanho (curta/média/longa) e tentativas
+  - [x] Verificação: vitest 25/25 + tsc limpo + build OK + preview
+- [x] Fase 4 — polish: Trilha C (fonte/foco/impressão do passage) + Trilha F (Toaster, aria-live, PWA, hidratação)
+  - [x] `src/lib/difficult.ts` + `PassageToolbar` (A−/A+, palavras difíceis, modo foco, imprimir) + `@media print`
+  - [x] `src/lib/storage.ts`/`settings.tsx`: voiceURI, passageScale, showHardWords, focusMode, motion
+  - [x] `useSpeechSynthesis` com voiceURI + seletor de voz e 3 velocidades em `/settings`
+  - [x] Toaster (sonner) no `__root.tsx`, aria-live na preparação/sessão, manifesto PWA + ícone
+  - [x] Navegação sem wrap-around (ponteiras desabilitadas), activeProps exato no TopNav
+  - [x] Hidratação: `supported` dos hooks de voz passa a false→true pós-montagem (sem divergência SSR)
+  - [x] Overflow @390px corrigido (TopNav quebra linha; barra inferior flex-1 com wrap)
+  - [x] Verificação: vitest 32/32 + tsgo limpo + build OK + preview sem pageerrors, sem overflow e Toaster montado
+
+Regras: nada de auth/multiusuário; tudo local (localStorage); verificação por vitest + build + preview antes de fechar cada fase.
